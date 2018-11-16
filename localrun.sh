@@ -1,7 +1,6 @@
 #!/bin/sh
 DEBUG=true
 BRANCH_NAME=lineage-16.0
-TARGET_DEVICE="js01lte"
 
 docker run \
     -e BRANCH_NAME=$BRANCH_NAME \
@@ -12,4 +11,4 @@ docker run \
     -w /lineage/src \
     --user root \
     -e DEBUG=$DEBUG \
-    docker.io/yasu-hide/build_lineageos $TARGET_DEVICE
+    docker.io/yasu-hide/build_lineageos $*
