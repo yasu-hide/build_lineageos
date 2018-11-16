@@ -16,7 +16,7 @@ git config --global user.email $GIT_USER_MAIL
 
 cd $SRC_DIR
 
-if ! [ "$(ls -A $SRC_DIR)" ]; then
+if ! [ -f "$SRC_DIR/.repo/manifest.xml" ]; then
     echo ">> [$(date)] Initializing repository" >> $DOCKER_LOG
     yes | repo init -u git://github.com/lineageos/android.git -b $BRANCH_NAME 2>&1 >&$DEBUG_LOG
 fi
