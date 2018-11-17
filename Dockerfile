@@ -33,6 +33,7 @@ ENV USER lineageos
 ENV SRC_DIR /lineage/src
 ENV CCACHE_DIR /lineage/ccache
 ENV OUT_DIR /lineage/out
+ENV GOMA_DIR /lineage/goma
 
 ENV USE_GOMA 1
 ENV USE_CCACHE 1
@@ -68,7 +69,7 @@ VOLUME $CCACHE_DIR
 VOLUME $OUT_DIR
 
 COPY build.sh /
-COPY --from=goma_client /goma_packager/client/out/Release /root/goma
+COPY --from=goma_client /goma_packager/client/out/Release $GOMA_DIR
 
 USER $USER
 WORKDIR $SRC_DIR
