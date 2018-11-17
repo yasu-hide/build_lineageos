@@ -1,7 +1,5 @@
 #!/bin/sh
-DEBUG=true
 BRANCH_NAME=lineage-16.0
-
 docker run \
     -e BRANCH_NAME=$BRANCH_NAME \
     -v /build/ccache:/lineage/ccache \
