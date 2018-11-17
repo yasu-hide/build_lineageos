@@ -1,7 +1,8 @@
 #!/bin/bash
-TARGET_DEVICE=$*
 DOCKER_LOG=/var/log/docker.log
 DEBUG_LOG=/dev/null
+
+echo ">> [$(date)] Build for TARGET_DEVICE $*"
 
 if [ "$DEBUG" = true ]; then
     DEBUG_LOG=$DOCKER_LOG
@@ -26,8 +27,9 @@ repo sync -j16 -f 2>&1 >&$DEBUG_LOG
 
 echo ">> [$(date)] Preparing build environment" >> $DOCKER_LOG
 source build/envsetup.sh 2>&1 >&$DEBUG_LOG
+source <( curl https://gist.githubusercontent.com/yasu-hide/f3f160b7a4569ee3940420bd5613523d/raw/repopick.sh )
 
-for codename in ${TARGET_DEVICE[*]}; do
+for codename in $*; do
 
     echo ">> [$(date)] Starting build for $codename" >> $DOCKER_LOG
     if brunch $codename 2>&1 >&$DEBUG_LOG; then
