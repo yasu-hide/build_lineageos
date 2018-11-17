@@ -8,7 +8,7 @@ docker run \
     -v /build/src1:/lineage/src \
     -v /build/out:/lineage/out \
     -v $(pwd)/local_manifests:/lineage/src/.repo/local_manifests \
-    -w /lineage/src \
+    --ulimit nproc=32768  --ulimit nofile=1048576 \
     --user root \
     -e DEBUG=$DEBUG \
     docker.io/yasu-hide/build_lineageos $*
