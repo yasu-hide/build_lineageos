@@ -1,3 +1,31 @@
+FROM ubuntu:16.04 AS goma_client
+ENV DEBIAN_FRONTEND noninteractive
+
+# update, and install basic packages
+RUN apt-get update \
+    && apt-get install -y \
+        build-essential \
+        libxml2 \
+        curl \
+        git \
+        python \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
+
+# install depot_tools http://www.chromium.org/developers/how-tos/install-depot-tools
+RUN git clone https://chromium.googlesource.com/chromium/tools/depot_tools.git
+ENV PATH /depot_tools:$PATH
+
+RUN mkdir goma_packager
+WORKDIR goma_packager
+RUN gclient config https://chromium.googlesource.com/infra/goma/client
+RUN gclient sync
+RUN cd client \
+    && gclient sync \
+    && gn gen --args='is_debug=false' out/Release \
+    && ninja -C out/Release
+
+
 FROM docker.io/lineageos/android_build
 MAINTAINER yasu-hide
 
@@ -6,6 +34,7 @@ ENV SRC_DIR /lineage/src
 ENV CCACHE_DIR /lineage/ccache
 ENV OUT_DIR /lineage/out
 
+ENV USE_GOMA 1
 ENV USE_CCACHE 1
 ENV CCACHE_SIZE "50G"
 ENV CCACHE_COMPRESS 1
@@ -38,4 +67,5 @@ VOLUME $OUT_DIR
 
 WORKDIR $SRC_DIR
 COPY build.sh /
+COPY --from=goma_client /goma_packager/client/out/Release /root/goma
 ENTRYPOINT ["/build.sh"]
