@@ -38,4 +38,4 @@ VOLUME $OUT_DIR
 
 WORKDIR $SRC_DIR
 COPY build.sh /
-ENTRYPOINT /build.sh
+ENTRYPOINT ["/build.sh"]
