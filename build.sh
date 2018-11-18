@@ -56,8 +56,8 @@ while getopts ISPB OPT; do
     esac
 done
 shift $((OPTIND - 1))
-[ $do_init -eq 1 ] && echo repo_init
-[ $do_sync -eq 1 ] && echo repo_sync
-[ $do_pick -eq 1 ] && echo repo_pick
-[ $do_build -eq 1 ] && echo build $*
+[ $do_init -eq 1 ] && repo_init
+[ $do_sync -eq 1 ] && repo_sync
+[ $do_pick -eq 1 ] && repo_pick
+[ $do_build -eq 1 ] && build $*
 exit 0
