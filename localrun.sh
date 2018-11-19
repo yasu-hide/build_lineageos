@@ -1,6 +1,6 @@
 #!/bin/sh
 BRANCH_NAME=lineage-16.0
-docker run \
+docker run --rm \
     -e BRANCH_NAME="$BRANCH_NAME" \
     -e DISTCC_HOSTS="$DISTCC_HOSTS" \
     -v /build/ccache:/lineage/ccache \
