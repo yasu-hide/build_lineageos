@@ -24,6 +24,7 @@ repo_pick () {
 }
 
 build () {
+    source build/envsetup.sh 2>&1
     for codename in $*; do
     
         echo ">> [$(date)] Starting build for $codename"
