@@ -20,6 +20,9 @@ repo_sync () {
 
 build () {
     source build/envsetup.sh 2>&1
+
+    [ -n "$LOCAL_DISTCC_POTENTIAL_HOSTS" ] && eval `distcc-pump --startup`
+
     for codename in $*; do
     
         echo ">> [$(date)] Starting build for $codename"
@@ -36,6 +39,8 @@ build () {
         
         echo ">> [$(date)] Finishing build for $codename"
     done
+
+    [ -n "$LOCAL_DISTCC_POTENTIAL_HOSTS" ] && distcc-pump --shutdown
 }
 
 if [ "$USE_CCACHE" = 1 ]; then
