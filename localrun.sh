@@ -18,7 +18,7 @@ docker run --rm \
     -e DISTCC_POTENTIAL_HOSTS="$LOCAL_DISTCC_POTENTIAL_HOSTS" \
     -e USE_GOMA= \
     -v /build/ccache:/lineage/ccache \
-    -v /build/src1:/lineage/src \
+    -v /build/src:/lineage/src \
     -v /build/out:/lineage/out \
     -v $(pwd)/local_manifests:/lineage/src/.repo/local_manifests \
     ${DOCKER_ADD_HOSTS} \
