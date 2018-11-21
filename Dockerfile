@@ -32,7 +32,7 @@ MAINTAINER yasu-hide
 ENV USER lineageos
 ENV SRC_DIR /lineage/src
 ENV CCACHE_DIR /lineage/ccache
-ENV OUT_DIR /lineage/out
+ENV ARTIFACT_OUT_DIR /lineage/out
 ENV GOMA_DIR /lineage/goma
 
 ENV USE_GOMA 1
@@ -64,11 +64,11 @@ RUN apt-get update && apt-get install -y \
     zlib1g-dev \
     && apt-get clean && rm -rf /var/lib/apt/lists/* 
 RUN groupadd -r -g 1000 buildbot && useradd -r -d /lineage -u 1000 -g buildbot $USER
-RUN mkdir $SRC_DIR $CCACHE_DIR $OUT_DIR && chown -R 1000:1000 $SRC_DIR $CCACHE_DIR $OUT_DIR
+RUN mkdir $SRC_DIR $CCACHE_DIR $ARTIFACT_OUT_DIR && chown -R 1000:1000 $SRC_DIR $CCACHE_DIR $ARTIFACT_OUT_DIR
 
 VOLUME $SRC_DIR
 VOLUME $CCACHE_DIR
-VOLUME $OUT_DIR
+VOLUME $ARTIFACT_OUT_DIR
 
 COPY build.sh /
 COPY --from=goma_client /goma_packager/client/out/Release $GOMA_DIR
