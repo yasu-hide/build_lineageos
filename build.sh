@@ -20,13 +20,20 @@ repo_sync () {
 
 build () {
     source build/envsetup.sh 2>&1
-
-    [ -n "$LOCAL_DISTCC_POTENTIAL_HOSTS" ] && eval `distcc-pump --startup`
+    processornum=$(grep -c ^processor /proc/cpuinfo)
+    parahosts=("localhost")
+    if [ -n "$DISTCC_POTENTIAL_HOSTS" ]; then
+        parahosts=($DISTCC_POTENTIAL_HOSTS)
+        echo ">> [$(date)] Startup distcc-pump"
+        eval `distcc-pump --startup`
+    elif [ -n "$DISTCC_HOSTS" ]; then
+        parahosts=($DISTCC_HOSTS)
+    fi
+    parallelnum=$(($processornum * ${#parahosts[@]}))
 
     for codename in $*; do
-    
-        echo ">> [$(date)] Starting build for $codename"
-        if brunch $codename 2>&1; then
+        echo ">> [$(date)] Starting build (par=${parallelnum}=${processornum}*${#parahosts[@]}) for $codename"
+        if (breakfast $codename && m -j $parallelnum) 2>&1; then
             echo ">> [$(date)] Moving build artifacts for $codename to '$OUT_DIR'"
             cd $SRC_DIR
             find out/target/product/$codename -name '*UNOFFICIAL*.zip*' -exec mv {} $OUT_DIR \;
@@ -40,7 +47,10 @@ build () {
         echo ">> [$(date)] Finishing build for $codename"
     done
 
-    [ -n "$LOCAL_DISTCC_POTENTIAL_HOSTS" ] && distcc-pump --shutdown
+    if [ -n "$DISTCC_POTENTIAL_HOSTS" ]; then
+        echo ">> [$(date)] Shutdown distcc-pump"
+        distcc-pump --shutdown
+    fi
 }
 
 if [ "$USE_CCACHE" = 1 ]; then
