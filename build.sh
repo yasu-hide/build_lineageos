@@ -22,6 +22,7 @@ build () {
     source build/envsetup.sh 2>&1
     processornum=$(grep -c ^processor /proc/cpuinfo)
     parahosts=("localhost")
+    [ $USE_CCACHE ] && unset DISTCC_POTENTIAL_HOSTS
     if [ -n "$DISTCC_POTENTIAL_HOSTS" ]; then
         parahosts=($DISTCC_POTENTIAL_HOSTS)
         echo ">> [$(date)] Startup distcc-pump"
