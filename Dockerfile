@@ -32,14 +32,9 @@ MAINTAINER yasu-hide
 ENV USER lineageos
 ENV SRC_DIR /lineage/src
 ENV CCACHE_DIR /lineage/ccache
+ENV CCACHE_SIZE 20G
 ENV ARTIFACT_OUT_DIR /lineage/out
 ENV GOMA_DIR /lineage/goma
-
-ENV USE_GOMA 1
-ENV USE_CCACHE 1
-ENV CCACHE_SIZE "20G"
-ENV CCACHE_COMPRESS 1
-ENV CCACHE_PREFIX "distcc"
 
 ENV GIT_USER_NAME "LineageOS Buildbot"
 ENV GIT_USER_MAIL "lineageos-buildbot@docker.host"

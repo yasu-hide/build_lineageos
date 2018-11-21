@@ -15,7 +15,8 @@ done
 docker run --rm \
     -e BRANCH_NAME="$BRANCH_NAME" \
     -e DISTCC_HOSTS="$LOCAL_DISTCC_HOSTS" \
-    -e USE_GOMA= \
+    -e DISTCC_POTENTIAL_HOSTS="$LOCAL_DISTCC_POTENTIAL_HOSTS" \
+    -e USE_GOMA=$USE_GOMA -e USE_CCACHE=$USE_CCACHE \
     -v /build/ccache:/lineage/ccache \
     -v /build/src:/lineage/src \
     -v /build/out:/lineage/out \
