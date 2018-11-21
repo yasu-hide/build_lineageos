@@ -33,7 +33,7 @@ build () {
 
     for codename in $*; do
         echo ">> [$(date)] Starting build (par=${parallelnum}=${processornum}*${#parahosts[@]}) for $codename"
-        if (breakfast $codename && lunch $TARGET_PRODUCT && make -j$parallelnum bacon) 2>&1; then
+        if (breakfast $codename && make -j$parallelnum bacon) 2>&1; then
             echo ">> [$(date)] Moving build artifacts for $codename to '$ARTIFACT_OUT_DIR'"
             cd $SRC_DIR
             find out/target/product/$codename -name '*UNOFFICIAL*.zip*' -exec mv {} $ARTIFACT_OUT_DIR \;
