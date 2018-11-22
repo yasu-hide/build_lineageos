@@ -61,6 +61,9 @@ RUN apt-get update && apt-get install -y \
 RUN groupadd -r -g 1000 buildbot && useradd -r -d /lineage -u 1000 -g buildbot $USER
 RUN mkdir $SRC_DIR $CCACHE_DIR $ARTIFACT_OUT_DIR && chown -R 1000:1000 $SRC_DIR $CCACHE_DIR $ARTIFACT_OUT_DIR
 
+# dirty hack for Python
+RUN sed -i -e '1s%^#!/usr/bin/python2.4%#!/usr/bin/env python2%' /usr/lib/distcc-pump/include_server/*.py
+
 VOLUME $SRC_DIR
 VOLUME $CCACHE_DIR
 VOLUME $ARTIFACT_OUT_DIR
