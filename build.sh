@@ -26,11 +26,17 @@ build () {
         echo ">> [$(date)] Entering GOMA mode"
         unset USE_CCACHE DISTCC_HOSTS DISTCC_POTENTIAL_HOSTS
         processornum=100
-    elif [ $USE_CCACHE -a "$USE_CCACHE" != "0" -a -n "$DISTCC_HOSTS" ]; then
-        echo ">> [$(date)] Entering distcc+ccache mode"
-        unset USE_GOMA DISTCC_POTENTIAL_HOSTS
-        parahosts=($parahosts $DISTCC_HOSTS)
-        export USE_CCACHE=1 CCACHE_COMPRESS=1 CCACHE_PREFIX=distcc
+    elif [ $USE_CCACHE -a "$USE_CCACHE" != "0" ]; then
+        if [ -n "$DISTCC_HOSTS" ]; then
+            echo ">> [$(date)] Entering distcc+ccache mode"
+            export CCACHE_PREFIX="distcc"
+            unset DISTCC_POTENTIAL_HOSTS
+            parahosts=($parahosts $DISTCC_HOSTS)
+        else
+            echo ">> [$(date)] Entering ccache mode"
+        fi
+        unset USE_GOMA
+        export USE_CCACHE=1 CCACHE_COMPRESS=1
         echo ">> [$(date)] Setup ccache"
         ccache -M $CCACHE_SIZE 2>&1
     elif [ -n "$DISTCC_POTENTIAL_HOSTS" ]; then
