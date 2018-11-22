@@ -26,7 +26,7 @@ build () {
         echo ">> [$(date)] Entering distcc+ccache mode"
         unset USE_GOMA DISTCC_POTENTIAL_HOSTS
         parahosts=($parahosts $DISTCC_HOSTS)
-        export USE_CCACHE=1 CCACHE_SIZE=20G CCACHE_COMPRESS=1 CCACHE_PREFIX=distcc
+        export USE_CCACHE=1 CCACHE_COMPRESS=1 CCACHE_PREFIX=distcc
         echo ">> [$(date)] Setup ccache"
         ccache -M $CCACHE_SIZE 2>&1
     elif [ -n "$DISTCC_POTENTIAL_HOSTS" ]; then
