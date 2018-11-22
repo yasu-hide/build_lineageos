@@ -22,7 +22,11 @@ build () {
     source build/envsetup.sh 2>&1
     processornum=$(grep -c ^processor /proc/cpuinfo)
     parahosts=("localhost")
-    if [ $USE_CCACHE -a -n "$DISTCC_HOSTS" ]; then
+    if [ -n "$USE_GOMA" -a "$USE_GOMA" != "0" ]; then
+        echo ">> [$(date)] Entering GOMA mode"
+        unset USE_CCACHE DISTCC_HOSTS DISTCC_POTENTIAL_HOSTS
+        processornum=100
+    elif [ $USE_CCACHE -a "$USE_CCACHE" != "0" -a -n "$DISTCC_HOSTS" ]; then
         echo ">> [$(date)] Entering distcc+ccache mode"
         unset USE_GOMA DISTCC_POTENTIAL_HOSTS
         parahosts=($parahosts $DISTCC_HOSTS)
@@ -36,10 +40,6 @@ build () {
         export CC_WRAPPER=distcc CXX_WRAPPER=distcc
         echo ">> [$(date)] Startup distcc-pump"
         eval $(distcc-pump --startup)
-    elif [ $USE_GOMA ]; then
-        echo ">> [$(date)] Entering GOMA mode"
-        unset USE_CCACHE DISTCC_HOSTS DISTCC_POTENTIAL_HOSTS
-        processornum=100
     fi
     parallelnum=$(($processornum * ${#parahosts[@]}))
 
